@@ -10,11 +10,9 @@ using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers{
     public class DepartmentsController : Controller{
-        private readonly SalesWebMvcContext _context;
         private readonly DepartmentService _departmentService;
 
-        public DepartmentsController(SalesWebMvcContext context, DepartmentService departmentService){
-            _context = context;
+        public DepartmentsController(DepartmentService departmentService){
             _departmentService = departmentService;
         }
 
@@ -43,8 +41,7 @@ namespace SalesWebMvc.Controllers{
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Department department){
             if (ModelState.IsValid){
-                _context.Add(department);
-                await _context.SaveChangesAsync();
+                await _departmentService.InsertAsync(department);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -73,11 +70,10 @@ namespace SalesWebMvc.Controllers{
 
             if (ModelState.IsValid){
                 try{
-                    _context.Update(department);
-                    await _context.SaveChangesAsync();
+                    await _departmentService.UpdateAsync(department);
                 }
                 catch (DbUpdateConcurrencyException){
-                    if (!DepartmentExists(department.Id)){
+                    if (!await DepartmentExists(id)){
                         return NotFound();
                     }
                     else{
@@ -107,17 +103,12 @@ namespace SalesWebMvc.Controllers{
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id){
-            var department = await _context.Department.FindAsync(id);
-            if (department != null){
-                _context.Department.Remove(department);
-            }
-
-            await _context.SaveChangesAsync();
+            await _departmentService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
-
-        private bool DepartmentExists(int id){
-            return _context.Department.Any(e => e.Id == id);
+- 
+        private async Task<bool> DepartmentExists(int id){
+            return await _departmentService.ExistsAsync(id);
         }
     }
 }

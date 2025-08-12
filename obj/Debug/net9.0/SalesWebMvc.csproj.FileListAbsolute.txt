@@ -354,3 +354,4 @@ D:\Asa.TechBoost\SalesWebMvc\obj\Debug\net9.0\SalesWebMvc.pdb
 D:\Asa.TechBoost\SalesWebMvc\obj\Debug\net9.0\SalesWebMvc.genruntimeconfig.cache
 D:\Asa.TechBoost\SalesWebMvc\obj\Debug\net9.0\ref\SalesWebMvc.dll
 D:\Asa.TechBoost\SalesWebMvc\obj\Debug\net9.0\compressed\3v09ddhaz0-8vkq3ies7y.gz
+D:\Asa.TechBoost\SalesWebMvc\obj\Debug\net9.0\SalesWebMvc.sourcelink.json
