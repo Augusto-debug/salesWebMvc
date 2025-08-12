@@ -1,0 +1,187 @@
+@model SalesWebMvc.Models.Department
+
+@{
+    ViewData["Title"] = "Detalhes do Departamento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1><i class="fas fa-building me-3"></i>Detalhes do Departamento</h1>
+            <p class="lead mb-0">Informações completas do departamento @Model.Name</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Perfil do Departamento</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="department-avatar mx-auto mb-3">
+                                <i class="fas fa-building fa-4x text-primary"></i>
+                            </div>
+                            <h4 class="text-primary mb-1">@Model.Name</h4>
+                            <span class="badge bg-info fs-6">Departamento #@Model.Id</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-building text-primary me-2"></i>Nome do Departamento
+                                        </label>
+                                        <div class="info-value">@Model.Name</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-hashtag text-primary me-2"></i>ID do Sistema
+                                        </label>
+                                        <div class="info-value">
+                                            <code>#@Model.Id</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-users text-primary me-2"></i>Total de Vendedores
+                                        </label>
+                                        <div class="info-value">
+                                            @if (Model.Sellers != null && Model.Sellers.Any())
+                                            {
+                                                <span class="fw-bold text-success fs-5">
+                                                    @Model.Sellers.Count vendedor(es)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Nenhum vendedor cadastrado</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-chart-line text-primary me-2"></i>Status
+                                        </label>
+                                        <div class="info-value">
+                                            <span class="badge bg-success">Ativo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Sellers != null && Model.Sellers.Any())
+                    {
+                        <hr class="my-4">
+                        
+                        <h6 class="mb-3">
+                            <i class="fas fa-users me-2"></i>Vendedores do Departamento
+                        </h6>
+                        
+                        <div class="row">
+                            @foreach (var seller in Model.Sellers.Take(6))
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card border-0 bg-light">
+                                        <div class="card-body p-3">
+                                            <div class="d-flex align-items-center">
+                                                <div class="seller-mini-avatar me-2">
+                                                    <i class="fas fa-user text-secondary"></i>
+                                                </div>
+                                                <div>
+                                                    <div class="fw-bold">@seller.Name</div>
+                                                    <small class="text-muted">@seller.Email</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        
+                        @if (Model.Sellers.Count > 6)
+                        {
+                            <div class="text-center">
+                                <small class="text-muted">
+                                    E mais @(Model.Sellers.Count - 6) vendedor(es)...
+                                </small>
+                            </div>
+                        }
+                    }
+
+                    <hr class="my-4">
+
+                    <div class="d-flex justify-content-between">
+                        <a asp-action="Index" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Voltar à Lista
+                        </a>
+                        <div>
+                            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                                <i class="fas fa-edit me-2"></i>Editar
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">
+                                <i class="fas fa-trash me-2"></i>Excluir
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.department-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #18bc9c;
+}
+
+.seller-mini-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dee2e6;
+    font-size: 0.8rem;
+}
+
+.info-item {
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #212529;
+}
+</style>

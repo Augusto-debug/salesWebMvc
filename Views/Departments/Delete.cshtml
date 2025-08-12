@@ -1,0 +1,217 @@
+@model SalesWebMvc.Models.Department
+
+@{
+    ViewData["Title"] = "Excluir Departamento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1><i class="fas fa-exclamation-triangle me-3 text-warning"></i>Excluir Departamento</h1>
+            <p class="lead mb-0">Confirme a exclusão do departamento @Model.Name</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Warning Alert -->
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Atenção!</h4>
+                <p class="mb-2">
+                    Esta ação é <strong>irreversível</strong>. Ao confirmar, o departamento será permanentemente removido do sistema.
+                </p>
+                @if (Model.Sellers != null && Model.Sellers.Any())
+                {
+                    <hr>
+                    <p class="mb-0">
+                        <i class="fas fa-users me-2 text-danger"></i>
+                        <strong>CUIDADO:</strong> Este departamento possui <strong>@Model.Sellers.Count vendedor(es)</strong> associado(s). 
+                        A exclusão pode afetar registros relacionados.
+                    </p>
+                }
+            </div>
+
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-building me-2"></i>Dados do Departamento a ser Excluído</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="department-avatar-delete mx-auto mb-3">
+                                <i class="fas fa-building fa-4x text-danger"></i>
+                            </div>
+                            <h4 class="text-danger mb-1">@Model.Name</h4>
+                            <span class="badge bg-secondary fs-6">Departamento #@Model.Id</span>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-building text-danger me-2"></i>Nome
+                                        </label>
+                                        <div class="info-value">@Model.Name</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-hashtag text-danger me-2"></i>ID do Sistema
+                                        </label>
+                                        <div class="info-value">
+                                            <code>#@Model.Id</code>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-users text-danger me-2"></i>Vendedores Associados
+                                        </label>
+                                        <div class="info-value">
+                                            @if (Model.Sellers != null && Model.Sellers.Any())
+                                            {
+                                                <span class="fw-bold text-warning">
+                                                    @Model.Sellers.Count vendedor(es)
+                                                </span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">Nenhum vendedor</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-calendar text-danger me-2"></i>Status
+                                        </label>
+                                        <div class="info-value">
+                                            <span class="badge bg-success">Ativo</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (Model.Sellers != null && Model.Sellers.Any())
+                    {
+                        <hr class="my-4">
+                        
+                        <div class="alert alert-danger">
+                            <h6 class="mb-3">
+                                <i class="fas fa-users me-2"></i>Vendedores que serão afetados:
+                            </h6>
+                            
+                            <div class="row">
+                                @foreach (var seller in Model.Sellers.Take(4))
+                                {
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="seller-mini-avatar-delete me-2">
+                                                <i class="fas fa-user text-danger"></i>
+                                            </div>
+                                            <div>
+                                                <div class="fw-bold">@seller.Name</div>
+                                                <small class="text-muted">@seller.Email</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            
+                            @if (Model.Sellers.Count > 4)
+                            {
+                                <div class="text-center mt-2">
+                                    <small class="text-muted">
+                                        E mais @(Model.Sellers.Count - 4) vendedor(es)...
+                                    </small>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <h6 class="text-danger mb-3">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Tem certeza que deseja excluir este departamento?
+                        </h6>
+                        
+                        <form asp-action="Delete" class="d-inline">
+                            <input type="hidden" asp-for="Id" />
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-3">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg" 
+                                    onclick="return confirm('Confirma a exclusão do departamento @Model.Name? Esta ação não pode ser desfeita.')">
+                                <i class="fas fa-trash me-2"></i>Sim, Excluir Definitivamente
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Actions -->
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <i class="fas fa-lightbulb me-1"></i>
+                    <strong>Dica:</strong> Se você não tem certeza, pode apenas 
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">visualizar os detalhes</a> 
+                    ou <a asp-action="Edit" asp-route-id="@Model.Id" class="text-decoration-none">editar as informações</a> 
+                    do departamento.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.department-avatar-delete {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #dc3545;
+}
+
+.seller-mini-avatar-delete {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #dc3545;
+    font-size: 0.8rem;
+}
+
+.info-item {
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #212529;
+}
+</style>

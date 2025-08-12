@@ -1,0 +1,194 @@
+@model IEnumerable<IGrouping<SalesWebMvc.Models.Department?, SalesWebMvc.Models.SalesRecord>>
+
+@{
+    ViewData["Title"] = "Pesquisa Agrupada de Vendas";
+}
+
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1><i class="fas fa-chart-bar me-3"></i>Pesquisa Agrupada de Vendas</h1>
+            <p class="lead mb-0">Relatório de vendas agrupado por departamento</p>
+        </div>
+    </div>
+
+    <!-- Search Form -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filtros de Pesquisa</h5>
+        </div>
+        <div class="card-body">
+            <form method="get">
+                <div class="row align-items-end">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="minDate" class="form-label fw-bold">
+                                <i class="fas fa-calendar me-2"></i>Data Inicial
+                            </label>
+                            <input type="date" class="form-control" name="minDate" id="minDate" value="@ViewData["minDate"]" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="maxDate" class="form-label fw-bold">
+                                <i class="fas fa-calendar me-2"></i>Data Final
+                            </label>
+                            <input type="date" class="form-control" name="maxDate" id="maxDate" value="@ViewData["maxDate"]" />
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-chart-bar me-2"></i>Pesquisar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Results Summary -->
+    @if (Model.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-building fa-2x text-primary mb-2"></i>
+                        <h4 class="text-primary">@Model.Count()</h4>
+                        <p class="mb-0">Departamentos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-shopping-cart fa-2x text-info mb-2"></i>
+                        <h4 class="text-info">@Model.Sum(g => g.Count())</h4>
+                        <p class="mb-0">Total de Vendas</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-dollar-sign fa-2x text-success mb-2"></i>
+                        <h4 class="text-success">R$ @Model.SelectMany(g => g).Sum(s => s.Amount).ToString("F2")</h4>
+                        <p class="mb-0">Valor Total</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <i class="fas fa-chart-line fa-2x text-warning mb-2"></i>
+                        <h4 class="text-warning">R$ @((Model.SelectMany(g => g).Sum(s => s.Amount) / Model.Sum(g => g.Count())).ToString("F2"))</h4>
+                        <p class="mb-0">Valor Médio</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- Department Groups -->
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-chart-pie me-2"></i>Vendas por Departamento
+            </h5>
+            <div>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Voltar
+                </a>
+                <a asp-action="SimpleSearch" asp-route-minDate="@ViewData["minDate"]" asp-route-maxDate="@ViewData["maxDate"]" class="btn btn-primary">
+                    <i class="fas fa-list me-2"></i>Ver Detalhado
+                </a>
+            </div>
+        </div>
+        <div class="card-body p-0">
+            @if (Model.Any())
+            {
+                @foreach (var group in Model.OrderByDescending(g => g.Sum(s => s.Amount)))
+                {
+                    <div class="border-bottom">
+                        <div class="card-header bg-light">
+                            <div class="row align-items-center">
+                                <div class="col-md-6">
+                                    <h6 class="mb-0">
+                                        <i class="fas fa-building me-2"></i>
+                                        @(group.Key?.Name ?? "Sem Departamento")
+                                    </h6>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <span class="badge bg-primary me-2">@group.Count() vendas</span>
+                                    <span class="badge bg-success">R$ @group.Sum(s => s.Amount).ToString("F2")</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-sm mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Vendedor</th>
+                                        <th>Valor</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var sale in group.OrderByDescending(s => s.Date))
+                                    {
+                                        <tr>
+                                            <td>@sale.Date.ToString("dd/MM/yyyy")</td>
+                                            <td>@sale.Seller.Name</td>
+                                            <td>
+                                                <span class="text-success fw-bold">R$ @sale.Amount.ToString("F2")</span>
+                                            </td>
+                                            <td>
+                                                @switch (sale.Status)
+                                                {
+                                                    case SalesWebMvc.Models.Enums.SaleStatus.Pending:
+                                                        <span class="badge bg-warning">Pendente</span>
+                                                        break;
+                                                    case SalesWebMvc.Models.Enums.SaleStatus.Billed:
+                                                        <span class="badge bg-success">Faturado</span>
+                                                        break;
+                                                    case SalesWebMvc.Models.Enums.SaleStatus.Canceled:
+                                                        <span class="badge bg-danger">Cancelado</span>
+                                                        break;
+                                                    default:
+                                                        <span class="badge bg-secondary">@sale.Status</span>
+                                                        break;
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Overall Total -->
+                <div class="card-footer bg-light">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <strong>Total Geral: @Model.Sum(g => g.Count()) vendas</strong>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <strong class="text-success">R$ @Model.SelectMany(g => g).Sum(s => s.Amount).ToString("F2")</strong>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-chart-bar fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">Nenhuma venda encontrada</h5>
+                    <p class="text-muted">Tente ajustar o período de pesquisa</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>

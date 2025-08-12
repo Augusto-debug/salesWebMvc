@@ -1,0 +1,102 @@
+@model SalesWebMvc.Models.Department
+
+@{
+    ViewData["Title"] = "Novo Departamento";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1><i class="fas fa-building me-3"></i>Cadastrar Novo Departamento</h1>
+            <p class="lead mb-0">Adicione um novo departamento à estrutura organizacional</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Informações do Departamento</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <div class="form-group mb-4">
+                            <label asp-for="Name" class="form-label fw-bold">
+                                <i class="fas fa-building me-2"></i>Nome do Departamento
+                            </label>
+                            <input asp-for="Name" class="form-control" placeholder="Ex: Vendas, Marketing, TI, RH..." />
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Digite um nome descritivo e único para o departamento
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+                        <!-- Preview Card -->
+                        <div class="card bg-light mb-4">
+                            <div class="card-body text-center">
+                                <h6 class="text-muted mb-3">
+                                    <i class="fas fa-eye me-2"></i>Pré-visualização
+                                </h6>
+                                <div class="department-preview">
+                                    <div class="department-icon-preview mx-auto mb-2">
+                                        <i class="fas fa-building text-primary"></i>
+                                    </div>
+                                    <div class="preview-name" id="previewName">Nome do Departamento</div>
+                                    <small class="text-muted">Como aparecerá no sistema</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-2"></i>Voltar à Lista
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="fas fa-save me-2"></i>Cadastrar Departamento
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.department-icon-preview {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #18bc9c;
+    font-size: 1.5rem;
+}
+
+.preview-name {
+    font-weight: 600;
+    color: #495057;
+    font-size: 1.1rem;
+}
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        // Update preview in real-time
+        document.getElementById('Name').addEventListener('input', function() {
+            const previewName = document.getElementById('previewName');
+            previewName.textContent = this.value || 'Nome do Departamento';
+        });
+    </script>
+}

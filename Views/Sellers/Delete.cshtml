@@ -1,0 +1,150 @@
+@model SalesWebMvc.Models.Seller
+
+@{
+    ViewData["Title"] = "Excluir Vendedor";
+}
+
+<div class="animate-fade-in">
+    <!-- Page Header -->
+    <div class="page-header text-center">
+        <div class="container">
+            <h1><i class="fas fa-exclamation-triangle me-3 text-warning"></i>Excluir Vendedor</h1>
+            <p class="lead mb-0">Confirme a exclusão do vendedor @Model.Name</p>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Warning Alert -->
+            <div class="alert alert-warning" role="alert">
+                <h4 class="alert-heading"><i class="fas fa-exclamation-triangle me-2"></i>Atenção!</h4>
+                <p class="mb-0">
+                    Esta ação é <strong>irreversível</strong>. Ao confirmar, todos os dados do vendedor serão permanentemente removidos do sistema.
+                </p>
+            </div>
+
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="mb-0"><i class="fas fa-user me-2"></i>Dados do Vendedor a ser Excluído</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-4">
+                            <div class="avatar-circle-delete mx-auto mb-3">
+                                <i class="fas fa-user fa-4x text-danger"></i>
+                            </div>
+                            <h4 class="text-danger mb-1">@Model.Name</h4>
+                            @if (Model.Department != null)
+                            {
+                                <span class="badge bg-info fs-6">@Model.Department.Name</span>
+                            }
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-envelope text-danger me-2"></i>Email
+                                        </label>
+                                        <div class="info-value">@Model.Email</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-calendar text-danger me-2"></i>Data de Nascimento
+                                        </label>
+                                        <div class="info-value">@Model.BirthDate.ToString("dd/MM/yyyy")</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-dollar-sign text-danger me-2"></i>Salário Base
+                                        </label>
+                                        <div class="info-value">
+                                            <span class="fw-bold text-success">@Model.BaseSalary.ToString("C")</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="info-item">
+                                        <label class="info-label">
+                                            <i class="fas fa-hashtag text-danger me-2"></i>ID do Sistema
+                                        </label>
+                                        <div class="info-value">
+                                            <code>#@Model.Id</code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="text-center">
+                        <h6 class="text-danger mb-3">
+                            <i class="fas fa-question-circle me-2"></i>
+                            Tem certeza que deseja excluir este vendedor?
+                        </h6>
+                        
+                        <form asp-action="Delete" class="d-inline">
+                            <input type="hidden" asp-for="Id" />
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-3">
+                                <i class="fas fa-arrow-left me-2"></i>Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-danger btn-lg" 
+                                    onclick="return confirm('Confirma a exclusão do vendedor @Model.Name? Esta ação não pode ser desfeita.')">
+                                <i class="fas fa-trash me-2"></i>Sim, Excluir Definitivamente
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Actions -->
+            <div class="text-center mt-4">
+                <p class="text-muted">
+                    <i class="fas fa-lightbulb me-1"></i>
+                    <strong>Dica:</strong> Se você não tem certeza, pode apenas 
+                    <a asp-action="Details" asp-route-id="@Model.Id" class="text-decoration-none">visualizar os detalhes</a> 
+                    ou <a asp-action="Edit" asp-route-id="@Model.Id" class="text-decoration-none">editar as informações</a> 
+                    do vendedor.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle-delete {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #dc3545;
+}
+
+.info-item {
+    margin-bottom: 1rem;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.info-value {
+    font-size: 1rem;
+    color: #212529;
+}
+</style>
