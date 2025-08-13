@@ -4,33 +4,32 @@ namespace SalesWebMvc.Models;
 
 public class Seller{
     public int Id{ get; init; }
-    
+
     [Display(Name = "Nome")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     [StringLength(60, MinimumLength = 3, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
     public string? Name{ get; set; }
-    
+
     [Display(Name = "Email")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     [EmailAddress(ErrorMessage = "O campo {0} deve ser um email válido.")]
     [StringLength(60, MinimumLength = 3)]
     public string? Email{ get; set; }
-    
+
     [Display(Name = "Data de Nascimento")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     public DateTime BirthDate{ get; set; }
-    
+
     [Display(Name = "Salário Base")]
     [DisplayFormat(DataFormatString = "{0:F2}")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-    [Range(100.0, 50000.0, ErrorMessage = "O campo {0} deve estar entre {1} e {2}.")] 
+    [Range(100.0, 50000.0, ErrorMessage = "O campo {0} deve estar entre {1} e {2}.")]
     public double BaseSalary{ get; set; }
-    
-    [Display(Name = "Departamento")]
-    public int DepartmentId{ get; set; }
-    
+
+    [Display(Name = "Departamento")] public int DepartmentId{ get; set; }
+
     public Department? Department{ get; set; }
     public List<SalesRecord> Sales{ get; init; } = new List<SalesRecord>();
 

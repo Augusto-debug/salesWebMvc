@@ -11,7 +11,7 @@ public class SellerService(SalesWebMvcContext context){
     }
 
     public async Task InsertAsync(Seller obj){
-        context.Add(obj);
+        await context.AddAsync(obj);
         await context.SaveChangesAsync();
     }
 
