@@ -4,22 +4,22 @@ using SalesWebMvc.Models.Enums;
 namespace SalesWebMvc.Models;
 
 public class SalesRecord{
-    public int Id{ get; set; }
+    public int Id{ get; init; }
     
     [Display(Name = "Data")]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
-    public DateTime Date{ get; set; }
+    public DateTime Date{ get; init; }
     
     [Display(Name = "Valor")]
     [DisplayFormat(DataFormatString = "{0:F2}")]
-    public double Amount{ get; set; }
+    public double Amount{ get; init; }
     
     [Display(Name = "Status")]
-    public SaleStatus Status{ get; set; }
+    public SaleStatus Status{ get; init; }
     
     [Display(Name = "Vendedor")]
-    public Seller Seller{ get; set; }
+    public Seller? Seller{ get; init; }
 
     public SalesRecord(){
     }

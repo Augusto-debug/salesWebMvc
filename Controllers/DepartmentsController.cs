@@ -1,23 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SalesWebMvc.Models;
 using SalesWebMvc.Services;
 
 namespace SalesWebMvc.Controllers{
-    public class DepartmentsController : Controller{
-        private readonly DepartmentService _departmentService;
-
-        public DepartmentsController(DepartmentService departmentService){
-            _departmentService = departmentService;
-        }
-
+    public class DepartmentsController(DepartmentService departmentService) : Controller{
+        
         public async Task<IActionResult> Index(){
-            return View(await _departmentService.FindAllAsync());
+            return View(await departmentService.FindAllAsync());
         }
 
         public async Task<IActionResult> Details(int? id){
@@ -25,7 +15,7 @@ namespace SalesWebMvc.Controllers{
                 return NotFound();
             }
 
-            var department = await _departmentService.FindByIdAsync(id.Value);
+            var department = await departmentService.FindByIdAsync(id.Value);
             if (department == null){
                 return NotFound();
             }
@@ -41,7 +31,7 @@ namespace SalesWebMvc.Controllers{
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name")] Department department){
             if (ModelState.IsValid){
-                await _departmentService.InsertAsync(department);
+                await departmentService.InsertAsync(department);
                 return RedirectToAction(nameof(Index));
             }
 
@@ -53,7 +43,7 @@ namespace SalesWebMvc.Controllers{
                 return NotFound();
             }
 
-            var department = await _departmentService.FindByIdAsync(id.Value);
+            var department = await departmentService.FindByIdAsync(id.Value);
             if (department == null){
                 return NotFound();
             }
@@ -70,7 +60,7 @@ namespace SalesWebMvc.Controllers{
 
             if (ModelState.IsValid){
                 try{
-                    await _departmentService.UpdateAsync(department);
+                    await departmentService.UpdateAsync(department);
                 }
                 catch (DbUpdateConcurrencyException){
                     if (!await DepartmentExists(id)){
@@ -92,7 +82,7 @@ namespace SalesWebMvc.Controllers{
                 return NotFound();
             }
 
-            var department = await _departmentService.FindByIdAsync(id.Value);
+            var department = await departmentService.FindByIdAsync(id.Value);
             if (department == null){
                 return NotFound();
             }
@@ -103,12 +93,12 @@ namespace SalesWebMvc.Controllers{
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id){
-            await _departmentService.RemoveAsync(id);
+            await departmentService.RemoveAsync(id);
             return RedirectToAction(nameof(Index));
         }
-- 
+
         private async Task<bool> DepartmentExists(int id){
-            return await _departmentService.ExistsAsync(id);
+            return await departmentService.ExistsAsync(id);
         }
     }
 }

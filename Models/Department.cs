@@ -1,9 +1,12 @@
-﻿namespace SalesWebMvc.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace SalesWebMvc.Models;
 
 public class Department{
-    public int Id{ get; set; }
-    public string Name{ get; set; }
-    public List<Seller> Sellers{ get; set; } = new List<Seller>();
+    public int Id{ get; init; }
+    [StringLength(60, MinimumLength = 3)]
+    public string? Name{ get; init; }
+    public List<Seller> Sellers{ get; init; } = new List<Seller>();
 
     public Department(){
     }

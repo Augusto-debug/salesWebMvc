@@ -1,21 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Linq.Expressions;
-using System.Text.Json.Serialization;
 
 namespace SalesWebMvc.Models;
 
 public class Seller{
-    public int Id{ get; set; }
+    public int Id{ get; init; }
     
     [Display(Name = "Nome")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     [StringLength(60, MinimumLength = 3, ErrorMessage = "O campo {0} deve ter entre {2} e {1} caracteres.")]
-    public string Name{ get; set; }
+    public string? Name{ get; set; }
     
     [Display(Name = "Email")]
     [Required(ErrorMessage = "O campo {0} é obrigatório.")]
     [EmailAddress(ErrorMessage = "O campo {0} deve ser um email válido.")]
-    public string Email{ get; set; }
+    [StringLength(60, MinimumLength = 3)]
+    public string? Email{ get; set; }
     
     [Display(Name = "Data de Nascimento")]
     [DataType(DataType.Date)]
@@ -32,8 +31,8 @@ public class Seller{
     [Display(Name = "Departamento")]
     public int DepartmentId{ get; set; }
     
-    public Department Department{ get; set; }
-    public List<SalesRecord> Sales{ get; set; } = new List<SalesRecord>();
+    public Department? Department{ get; set; }
+    public List<SalesRecord> Sales{ get; init; } = new List<SalesRecord>();
 
     public Seller(){
     }
@@ -69,20 +68,20 @@ public class Seller{
         // return total;
     }
 
-    public void f(){
-        var lista = new List<string>();
-        lista.Where(f => f.Contains("a"));
-    }
-
-    public void f2(Func<string, bool> filtro){
-        IEnumerable<string> lista = new List<string>();
-        lista = lista.Where(filtro);
-    }
-
-    public void f3(Expression<Func<string, bool>> filtro){
-        IEnumerable<string> lista = new List<string>();
-        lista = lista.Where(f => f.Contains("a"));
-    }
+    // public void f(){
+    //     var lista = new List<string>();
+    //     lista.Where(f => f.Contains("a"));
+    // }
+    //
+    // public void f2(Func<string, bool> filtro){
+    //     IEnumerable<string> lista = new List<string>();
+    //     lista = lista.Where(filtro);
+    // }
+    //
+    // public void f3(Expression<Func<string, bool>> filtro){
+    //     IEnumerable<string> lista = new List<string>();
+    //     lista = lista.Where(f => f.Contains("a"));
+    // }
 
     public override string ToString(){
         return
